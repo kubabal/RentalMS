@@ -3,14 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to RentalMS</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Welcome to RentalMS!</h1>
-    <p>
-        <a href="{{ url_for('add_property') }}">Add a new property</a>
-    </p>
-    <p>
-        <a href="{{ url_for('add_tenant') }}">Add a new tenant</a>
-    </p>
+    <div class="container mt-4">
+        <h1>Welcome to RentalMS!</h1>
+        <div class="my-3">
+            <a href="{{ url_for('add_property') }}" class="btn btn-primary">Add a new property</a>
+            <a href="{{ url_for('add_tenant') }}" class="btn btn-primary">Add a new tenant</a>
+            <a href="{{ url_for('add_lease') }}" class="btn btn-primary">Add a new lease</a>
+            <a href="{{ url_for('generate_report') }}" class="btn btn-primary">Generate report</a>
+        </div>
+        <h2>Current Leases</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Lease ID</th>
+                    <th>Property</th>
+                    <th>Tenant</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Rent</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lease in leases %}
+                <tr>
+                    <td>{{ lease.lease_id }}</td>
+                    <td>{{ lease.property.address }}</td>
+                    <td>{{ lease.tenant.name }}</td>
+                    <td>{{ lease.start_date }}</td>
+                    <td>{{ lease.end_date }}</td>
+                    <td>{{ lease.rent }}</td>
+                    <td>
+                        <a href="{{ url_for('edit_lease', lease_id=lease.lease_id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ url_for('delete_lease', lease_id=lease.lease_id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Lease</title>
+</head>
+<body>
+    <h1>Add Lease</h1>
+    <form method="post">
+        Start Date: <input type="date" name="start_date" required>
+        End Date: <input type="date" name="end_date" required>
+        Property:
+        <select name="property_id" required>
+            {% for property in properties %}
+            <option value="{{ property.property_id }}">{{ property.address }}</option>
+            {% endfor %}
+        </select>
+        Tenant:
+        <select name="tenant_id" required>
+            {% for tenant in tenants %}
+            <option value="{{ tenant.tenant_id }}">{{ tenant.name }}</option>
+            {% endfor %}
+        </select>
+        Monthly Rent: <input type="number" name="rent" step="0.01" required>
+        <input type="submit" value="Add Lease">
+    </form>
+</body>
+</html>

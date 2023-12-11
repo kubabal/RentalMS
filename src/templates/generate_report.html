@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Generate Report</h1>
+        <form method="post">
+            Start Date: <input type="date" name="start_date">
+            End Date: <input type="date" name="end_date">
+            Property: 
+            <select name="property_id">
+                <option value="">All Properties</option>
+                {% for property in properties %}
+                <option value="{{ property.property_id }}">{{ property.address }}</option>
+                {% endfor %}
+            </select>
+            Tenant:
+            <select name="tenant_id">
+                <option value="">All Tenants</option>
+                {% for tenant in tenants %}
+                <option value="{{ tenant.tenant_id }}">{{ tenant.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Generate Report">
+        </form>
+
+        {% if report_data %}
+            <h2 class="mb-4">Report Results</h2>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                        <h5>Average Rent</h5>
+                        <p class="font-weight-bold">${{ report_data.average_rent }}</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                        <h5>Total Leases</h5>
+                        <p class="font-weight-bold">{{ report_data.total_leases }}</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                        <h5>Lease with Max Rent</h5>
+                        <p class="font-weight-bold">
+                            ${{ report_data.max_rent_lease.rent }}<br>
+                            {{ report_data.max_rent_lease.property_address }}<br>
+                            <em>{{ report_data.max_rent_lease.tenant_name }}</em>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                        <h5>Lease with Min Rent</h5>
+                        <p class="font-weight-bold">
+                            ${{ report_data.min_rent_lease.rent }}<br>
+                            {{ report_data.min_rent_lease.property_address }}<br>
+                            <em>{{ report_data.min_rent_lease.tenant_name }}</em>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="p-3 border rounded" style="background-color: #f8f9fa;">
+                        <h5>Average Lease Duration</h5>
+                        <p class="font-weight-bold">{{ report_data.average_lease_duration }} days</p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <h2>Filtered Leases</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Lease ID</th>
+                        <th>Property</th>
+                        <th>Tenant</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Rent</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lease in filtered_leases %}
+                    <tr>
+                        <td>{{ lease.lease_id }}</td>
+                        <td>{{ lease.property_address }}</td>
+                        <td>{{ lease.tenant_name }}</td>
+                        <td>{{ lease.start_date }}</td>
+                        <td>{{ lease.end_date }}</td>
+                        <td>{{ lease.rent }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_lease', lease_id=lease.lease_id) }}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{{ url_for('delete_lease', lease_id=lease.lease_id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

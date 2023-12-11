@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Lease</title>
+</head>
+<body>
+    <h1>Edit Lease</h1>
+    <form method="post">
+        Start Date: <input type="date" name="start_date" value="{{ lease.start_date.strftime('%Y-%m-%d') }}" required>
+        End Date: <input type="date" name="end_date" value="{{ lease.end_date.strftime('%Y-%m-%d') }}" required>
+        Property:
+        <select name="property_id" required>
+            {% for property in properties %}
+            <option value="{{ property.property_id }}" {% if property.property_id == lease.property.property_id %}selected{% endif %}>{{ property.address }}</option>
+            {% endfor %}
+        </select>
+        Tenant:
+        <select name="tenant_id" required>
+            {% for tenant in tenants %}
+            <option value="{{ tenant.tenant_id }}" {% if tenant.tenant_id == lease.tenant.tenant_id %}selected{% endif %}>{{ tenant.name }}</option>
+            {% endfor %}
+        </select>
+        Monthly Rent: <input type="number" name="rent" step="0.01" value="{{ lease.rent }}" required>
+        <input type="submit" value="Update Lease">
+    </form>
+</body>
+</html>
